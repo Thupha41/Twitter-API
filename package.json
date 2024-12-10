@@ -12,9 +12,9 @@
     "prettier:fix": "prettier --write ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Thupha4141",
   "license": "ISC",
-  "description": "",
+  "description": "Twitter API",
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/express": "^5.0.0",
