@@ -1,6 +1,7 @@
 import { Db, MongoClient, Collection } from 'mongodb'
 import { envConfig } from '../constants/config'
 import User from '../models/schemas/User.schema'
+import RefreshToken from '~/models/schemas/RefreshToken.schema'
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twitter-cluster.hzc1q.mongodb.net/?retryWrites=true&w=majority&appName=Twitter-Cluster`
 
 class DatabaseService {
@@ -23,6 +24,9 @@ class DatabaseService {
 
   get users(): Collection<User> {
     return this.db.collection(envConfig.dbUsersCollection)
+  }
+  get refreshTokens(): Collection<RefreshToken> {
+    return this.db.collection(envConfig.dbRefreshTokensCollection)
   }
 }
 const databaseService = new DatabaseService()
