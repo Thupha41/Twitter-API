@@ -10,11 +10,11 @@ const app = express()
 // Parse JSON body to object
 app.use(express.json())
 
-// Validation and route
-app.use(defaultErrorHandler)
-
 // Initialize API Routes
 initApiRoute(app)
+
+// Validation and route
+app.use(defaultErrorHandler)
 
 // Connect to database
 databaseService.connect()

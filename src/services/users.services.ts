@@ -24,7 +24,7 @@ class UsersService {
     return signToken({
       payload: {
         user_id,
-        token_type: TokenType.AccessToken
+        token_type: TokenType.RefreshToken
       },
       privateKey: envConfig.jwtSecretRefreshToken,
       options: {
@@ -63,6 +63,12 @@ class UsersService {
   //Login user
   async login(user_id: string) {
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id)
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: refresh_token
+      })
+    )
     return {
       access_token,
       refresh_token
@@ -71,7 +77,7 @@ class UsersService {
 
   //Check if email exist in db or not
   async checkEmailExist(email: string) {
-    const user = databaseService.users.findOne({ email })
+    const user = await databaseService.users.findOne({ email })
     console.log(user)
     return Boolean(user)
   }
