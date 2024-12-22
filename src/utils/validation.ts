@@ -1,4 +1,4 @@
-import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema';
+import { RunnableValidationChains } from 'express-validator/lib/middlewares/schema'
 import express from 'express'
 import { body, validationResult, ValidationChain } from 'express-validator'
 import HTTP_STATUS from '~/constants/httpStatus'
