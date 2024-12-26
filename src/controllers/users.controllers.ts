@@ -133,3 +133,13 @@ export const resetPasswordController = async (
   res.json(result)
   return
 }
+
+export const getMeController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const user = await usersService.getMe(user_id)
+  res.json({
+    message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result: user
+  })
+  return
+}
