@@ -58,6 +58,20 @@ class UsersService {
     })
   }
 
+  private signForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+    return signToken({
+      payload: {
+        user_id,
+        token_type: TokenType.ForgotPasswordToken,
+        verify
+      },
+      privateKey: envConfig.jwtSecretForgotPasswordToken,
+      options: {
+        expiresIn: envConfig.forgotPasswordTokenExpiresIn
+      }
+    })
+  }
+
   //Register new user
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId()
@@ -163,6 +177,26 @@ class UsersService {
     )
     return {
       message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS
+    }
+  }
+
+  async forgotPassword({ user_id, verify, email }: { user_id: string; email: string; verify: UserVerifyStatus }) {
+    const forgot_password_token = await this.signForgotPasswordToken({
+      user_id,
+      verify
+    })
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          forgot_password_token,
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+    //gửi email đến đường link email người dùng eg: https://twitter.com/forgot-password?token=token
+    console.log('>>> check forgot password token', forgot_password_token)
+    return {
+      message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
     }
   }
 }

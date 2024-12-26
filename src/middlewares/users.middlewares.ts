@@ -225,7 +225,8 @@ export const accessTokenValidator = validate(
         custom: {
           options: async (value: string, { req }) => {
             const access_token = (value || '').split(' ')[1]
-            return await verifyAccessToken(access_token, req as Request)
+            const decoded = await verifyAccessToken(access_token, req as Request)
+            ;(req as Request).decoded_authorization = decoded
           }
         }
       }
@@ -321,3 +322,29 @@ export const isUserLoggedInValidator = (middleware: (req: Request, res: Response
     next()
   }
 }
+
+export const forgotPasswordValidator = validate(
+  checkSchema(
+    {
+      email: {
+        isEmail: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID
+        },
+        trim: true,
+        custom: {
+          options: async (value, { req }) => {
+            const user = await databaseService.users.findOne({
+              email: value
+            })
+            if (user === null) {
+              throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
+            }
+            req.user = user
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
