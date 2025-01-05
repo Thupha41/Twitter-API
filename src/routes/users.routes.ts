@@ -13,7 +13,8 @@ import {
   getProfileController,
   followController,
   unfollowController,
-  changePasswordController
+  changePasswordController,
+  oauthController
 } from '~/controllers/users.controllers'
 import {
   loginValidator,
@@ -42,6 +43,16 @@ const userRouter = Router()
  */
 
 userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+
+/**
+ * Description: Login with google
+ * Path: /login
+ * method: POST
+ * Body: {email: string, password: string}
+ */
+
+userRouter.post('/oauth/google', wrapRequestHandler(oauthController))
+
 /**
  * Description: Register a new user
  * Path: /register
