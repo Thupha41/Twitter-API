@@ -11,7 +11,8 @@ import {
   getMeController,
   updateMeController,
   getProfileController,
-  followController
+  followController,
+  unfollowController
 } from '~/controllers/users.controllers'
 import {
   loginValidator,
@@ -24,7 +25,8 @@ import {
   resetPasswordValidator,
   verifiedUserValidator,
   updateMeValidator,
-  followValidator
+  followValidator,
+  unfollowValidator
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -135,9 +137,10 @@ userRouter.get('/:username', wrapRequestHandler(getProfileController))
 
 /**
  * Description: Follow someone
- * Path: /me
+ * Path: /follow
  * Method: POST
- * Body: {user_id: string, }
+ * Body: {followed_user_id: string}
+ * Header: { Authorization: Bearer <access_token> }
  */
 userRouter.post(
   '/follow',
@@ -145,6 +148,20 @@ userRouter.post(
   verifiedUserValidator,
   followValidator,
   wrapRequestHandler(followController)
+)
+
+/**
+ * Description: Unfollow someone
+ * Path: /follow/user_id
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token> }
+ */
+userRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unfollowValidator,
+  wrapRequestHandler(unfollowController)
 )
 
 export default userRouter
