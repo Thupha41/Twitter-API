@@ -22,6 +22,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import HTTP_STATUS from '~/constants/httpStatus'
 import databaseService from '~/services/database.services'
 import { UserVerifyStatus } from '~/constants/enums'
+import { envConfig } from '~/constants/config'
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const user = req.user as User
   const user_id = user._id as ObjectId
@@ -30,6 +31,14 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
     message: USERS_MESSAGES.LOGIN_SUCCESS,
     result
   })
+  return
+}
+
+export const oauthController = async (req: Request, res: Response) => {
+  const { code } = req.query
+  const result = await usersService.oauth(code as string)
+  const urlRedirect = `${envConfig.clientRedirectCallback}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}`
+  res.redirect(urlRedirect)
   return
 }
 

@@ -28,5 +28,9 @@ export const envConfig = {
   accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN as string,
   dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
   emailVerifyTokenExpiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRES_IN as string,
-  forgotPasswordTokenExpiresIn: process.env.FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string
+  forgotPasswordTokenExpiresIn: process.env.FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string,
+  clientRedirectCallback: process.env.GOOGLE_REDIRECT_URL as string,
+  googleClientId: process.env.GOOGLE_CLIENT_ID as string,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  googleRedirectUri: process.env.GOOGLE_REDIRECT_URL as string
 }
