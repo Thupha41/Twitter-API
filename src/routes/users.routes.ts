@@ -9,7 +9,9 @@ import {
   verifyForgotPasswordController,
   resetPasswordController,
   getMeController,
-  updateMeController
+  updateMeController,
+  getProfileController,
+  followController
 } from '~/controllers/users.controllers'
 import {
   loginValidator,
@@ -21,7 +23,8 @@ import {
   verifyForgotPasswordTokenValidator,
   resetPasswordValidator,
   verifiedUserValidator,
-  updateMeValidator
+  updateMeValidator,
+  followValidator
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -121,4 +124,27 @@ userRouter.patch(
   updateMeValidator,
   wrapRequestHandler(updateMeController)
 )
+
+/**
+ * Description: Get user profile by id
+ * Path: /me
+ * Method: GET
+ * Body: {}
+ */
+userRouter.get('/:username', wrapRequestHandler(getProfileController))
+
+/**
+ * Description: Follow someone
+ * Path: /me
+ * Method: POST
+ * Body: {user_id: string, }
+ */
+userRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followValidator,
+  wrapRequestHandler(followController)
+)
+
 export default userRouter
